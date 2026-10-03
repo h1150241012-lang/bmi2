@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可愛健康 BMI 測量小天地</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #FFF9E6 0%, #E8F5E9 50%, #E0F2FE 100%);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(255, 182, 193, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 可愛懸浮動畫 */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(4deg); }
+        }
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(15px) rotate(-4deg); }
+        }
+        .animate-float-1 { animation: float-slow 4s ease-in-out infinite; }
+        .animate-float-2 { animation: float-reverse 4.5s ease-in-out infinite; }
+        .animate-float-3 { animation: float-slow 5s ease-in-out infinite; }
+
+        /* 可愛脈動 */
+        @keyframes pulse-cute {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .animate-pulse-cute {
+            animation: pulse-cute 2s ease-in-out infinite;
+        }
+
+        /* 自訂 Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #fbcfe8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f472b6; }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 flex flex-col justify-between items-center relative overflow-x-hidden">
+
+    <!-- 網頁左側邊欄可愛飾圖（放大2倍） -->
+    <div class="hidden 2xl:flex flex-col items-center justify-around fixed left-6 top-0 bottom-0 w-64 pointer-events-none z-0">
+        <div class="animate-float-1 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-pink-200">
+            <span class="text-8xl">👦</span>
+            <span class="text-base font-black text-sky-600 mt-2">健朗男孩</span>
+        </div>
+        <div class="animate-float-2 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-amber-200">
+            <span class="text-8xl">🐶</span>
+            <span class="text-base font-black text-amber-600 mt-2">旺旺狗</span>
+        </div>
+        <div class="animate-float-3 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-emerald-200">
+            <span class="text-8xl">🐰</span>
+            <span class="text-base font-black text-emerald-600 mt-2">活力兔</span>
+        </div>
+    </div>
+
+    <!-- 網頁右側邊欄可愛飾圖（放大2倍） -->
+    <div class="hidden 2xl:flex flex-col items-center justify-around fixed right-6 top-0 bottom-0 w-64 pointer-events-none z-0">
+        <div class="animate-float-2 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-sky-200">
+            <span class="text-8xl">👧</span>
+            <span class="text-base font-black text-pink-600 mt-2">甜美女孩</span>
+        </div>
+        <div class="animate-float-1 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-purple-200">
+            <span class="text-8xl">🐱</span>
+            <span class="text-base font-black text-purple-600 mt-2">咪咪貓</span>
+        </div>
+        <div class="animate-float-3 flex flex-col items-center bg-white/80 backdrop-blur-xs p-5 rounded-3xl shadow-md border-2 border-orange-200">
+            <span class="text-8xl">🐻</span>
+            <span class="text-base font-black text-orange-600 mt-2">快樂熊</span>
+        </div>
+    </div>
+
+    <!-- 主要內容區域 -->
+    <main class="w-full max-w-3xl bg-white/95 backdrop-blur-md rounded-3xl p-6 md:p-10 card-shadow border-4 border-white relative z-10 my-auto">
+        
+        <!-- 頁頭 -->
+        <div class="text-center mb-8 relative">
+            <div class="inline-block bg-amber-100 text-amber-700 font-bold px-4 py-1.5 rounded-full text-sm mb-2 shadow-sm border border-amber-200">
+                🐾 衛生福利部 國民健康署建議標準
+            </div>
+            <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-wide flex items-center justify-center gap-2">
+                <span class="text-sky-400">👦</span>
+                <span class="text-pink-400">BMI</span> 健康測量小天地
+                <span class="text-pink-400">👧</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-2 font-bold">歡迎大人與小朋友一起來量量看，為健康把關！</p>
+        </div>
+
+        <!-- 表單區 -->
+        <form id="bmi-form" onsubmit="calculateBMI(event)" class="space-y-6">
+            
+            <!-- 1. 年齡分類：成人 vs 兒童/青少年 -->
+            <div class="bg-slate-50/80 p-4 rounded-2xl border-2 border-slate-100">
+                <label class="block text-slate-700 font-black text-center mb-3">
+                    <i class="fa-solid fa-users text-indigo-400 mr-1"></i> 請選擇身份分類
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="userType" value="adult" checked onchange="toggleAgeInput()" class="peer hidden">
+                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-indigo-400 peer-checked:bg-indigo-50/70 text-center font-bold text-slate-600 peer-checked:text-indigo-600 transition flex flex-col items-center gap-1">
+                            <span class="text-3xl">🧑‍💼</span>
+                            <span>成人 (18歲以上)</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="userType" value="child" onchange="toggleAgeInput()" class="peer hidden">
+                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-pink-400 peer-checked:bg-pink-50/70 text-center font-bold text-slate-600 peer-checked:text-pink-600 transition flex flex-col items-center gap-1">
+                            <span class="text-3xl">🎒</span>
+                            <span>兒童與青少年 (2-17歲)</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 2. 性別選擇 -->
+            <div class="bg-slate-50/80 p-4 rounded-2xl border-2 border-slate-100">
+                <label class="block text-slate-700 font-black text-center mb-3">
+                    <i class="fa-solid fa-venus-mars text-rose-400 mr-1"></i> 請選擇生理性別
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="gender" value="boy" checked class="peer hidden">
+                        <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-sky-400 peer-checked:bg-sky-50 text-center font-bold text-slate-600 peer-checked:text-sky-600 transition flex flex-col items-center gap-2 group">
+                            <div class="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                                👦
+                            </div>
+                            <span class="text-base">男孩 / 男性</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="gender" value="girl" class="peer hidden">
+                        <div class="p-4 rounded-2xl border-2 border-slate-200 peer-checked:border-pink-400 peer-checked:bg-pink-50 text-center font-bold text-slate-600 peer-checked:text-pink-600 transition flex flex-col items-center gap-2 group">
+                            <div class="w-16 h-16 rounded-full bg-pink-100 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                                👧
+                            </div>
+                            <span class="text-base">女孩 / 女性</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3. 輸入數值 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div id="age-input-block" class="hidden">
+                    <label class="block text-slate-700 font-bold mb-1 text-sm">
+                        <i class="fa-solid fa-cake-candles text-amber-400 mr-1"></i> 年齡 (歲)
+                    </label>
+                    <input type="number" id="age" min="2" max="17" placeholder="例如: 10" 
+                           class="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none font-bold text-slate-700">
+                    <p class="text-xs text-slate-400 mt-1">請輸入 2 ~ 17 歲</p>
+                </div>
+
+                <div id="height-block" class="col-span-1">
+                    <label class="block text-slate-700 font-bold mb-1 text-sm">
+                        <i class="fa-solid fa-ruler-vertical text-emerald-400 mr-1"></i> 身高 (cm)
+                    </label>
+                    <input type="number" id="height" step="0.1" min="50" max="250" required placeholder="例如: 165" 
+                           class="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-400 focus:outline-none font-bold text-slate-700">
+                </div>
+
+                <div id="weight-block" class="col-span-1">
+                    <label class="block text-slate-700 font-bold mb-1 text-sm">
+                        <i class="fa-solid fa-weight-scale text-purple-400 mr-1"></i> 體重 (kg)
+                    </label>
+                    <input type="number" id="weight" step="0.1" min="5" max="300" required placeholder="例如: 55" 
+                           class="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-purple-400 focus:outline-none font-bold text-slate-700">
+                </div>
+            </div>
+
+            <!-- 按鈕 -->
+            <button type="submit" 
+                    class="w-full py-4 bg-gradient-to-r from-amber-400 via-orange-400 to-pink-400 hover:from-amber-500 hover:to-pink-500 text-white font-black text-xl rounded-2xl shadow-lg shadow-orange-200 transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center justify-center gap-2">
+                <span>🐱 開始計算 BMI 與健康建議！</span>
+            </button>
+        </form>
+
+        <!-- 個人計算結果 (預設隱藏) -->
+        <div id="result-card" class="hidden mt-8 p-6 rounded-3xl border-4 border-dashed transition-all animate-pulse-cute">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <!-- 可愛動物夥伴圖示 -->
+                <div id="animal-avatar" class="w-28 h-28 rounded-full bg-white flex items-center justify-center text-6xl shadow-inner border-4 border-amber-200 shrink-0">
+                    🐶
+                </div>
+
+                <div class="flex-1 text-center md:text-left">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+                        <span id="result-status-tag" class="px-3 py-1 rounded-full text-white font-black text-sm">體重正常</span>
+                        <span id="result-category-tag" class="bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full text-xs">成人標準</span>
+                    </div>
+
+                    <div class="text-3xl font-black text-slate-800 mb-2">
+                        您的 BMI 數值：<span id="bmi-value" class="text-4xl font-black text-amber-500">21.5</span>
+                    </div>
+
+                    <p id="result-advice" class="text-slate-600 font-bold text-sm leading-relaxed bg-white/80 p-3.5 rounded-xl border border-slate-100 shadow-xs">
+                        衛福部建議：繼續保持均衡飲食與規律運動喔！
+                    </p>
+                </div>
+            </div>
+
+            <!-- 對照備註 -->
+            <div class="mt-6 border-t border-slate-200/60 pt-3 text-xs text-slate-500 font-bold">
+                <div class="flex items-center gap-1 text-slate-700 font-black mb-1">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i> 計算依據細節：
+                </div>
+                <p id="reference-note" class="leading-normal">
+                    成人 BMI 基準：過輕 (&lt;18.5) | 正常 (18.5 ≤ BMI &lt; 24) | 過重 (24 ≤ BMI &lt; 27) | 肥胖 (BMI ≥ 27)
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 📌 頁尾：衛福部 BMI 範圍與健康建議對照表格 -->
+    <footer class="w-full max-w-3xl mt-10 relative z-10 space-y-4">
+        
+        <div class="bg-white/90 backdrop-blur-md p-6 rounded-3xl card-shadow border-4 border-white">
+            <h2 class="text-base md:text-lg font-black text-slate-800 mb-4 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-table-list text-amber-500"></i>
+                衛福部國民健康署 BMI 體位分類對照表與健康建議
+            </h2>
+
+            <!-- 表格：成人 BMI 範圍與建議 -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 mb-4">
+                <table class="w-full text-left text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-amber-100/80 text-amber-900 border-b border-slate-200">
+                            <th class="p-3 font-black whitespace-nowrap">分類</th>
+                            <th class="p-3 font-black whitespace-nowrap">成人 BMI 範圍 (18歲以上)</th>
+                            <th class="p-3 font-black">衛福部健康建議方針</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700 font-bold">
+                        <tr class="bg-sky-50/50 hover:bg-sky-50">
+                            <td class="p-3 text-sky-700 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded-md bg-sky-200 text-sky-800 font-black">體重過輕</span>
+                            </td>
+                            <td class="p-3 whitespace-nowrap">BMI &lt; 18.5</td>
+                            <td class="p-3">建議保持均衡飲食，多攝取優質蛋白質，搭配適度肌肉強化運動以增強體力。</td>
+                        </tr>
+                        <tr class="bg-emerald-50/50 hover:bg-emerald-50">
+                            <td class="p-3 text-emerald-700 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-200 text-emerald-800 font-black">適中正常</span>
+                            </td>
+                            <td class="p-3 whitespace-nowrap">18.5 ≤ BMI &lt; 24.0</td>
+                            <td class="p-3">太棒了！請繼續保持均衡飲食與每週至少 150 分鐘的中強度規律運動。</td>
+                        </tr>
+                        <tr class="bg-amber-50/50 hover:bg-amber-50">
+                            <td class="p-3 text-amber-700 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded-md bg-amber-200 text-amber-800 font-black">體重過重</span>
+                            </td>
+                            <td class="p-3 whitespace-nowrap">24.0 ≤ BMI &lt; 27.0</td>
+                            <td class="p-3">注意熱量攝取，減少含糖飲料與高油高糖食品，增加每日日常身體活動量。</td>
+                        </tr>
+                        <tr class="bg-rose-50/50 hover:bg-rose-50">
+                            <td class="p-3 text-rose-700 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded-md bg-rose-200 text-rose-800 font-black">肥胖</span>
+                            </td>
+                            <td class="p-3 whitespace-nowrap">BMI ≥ 27.0</td>
+                            <td class="p-3">建議諮詢醫師或營養師，訂定健康的飲食控制計畫與持續性的規律減重運動。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 兒童與青少年備註與綜合健康建議 -->
+            <div class="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200 text-xs text-slate-600 font-bold space-y-1">
+                <p>🎒 <strong>兒童與青少年 (2-17歲)：</strong> 因生長發育迅速，衛福部依據不同年齡與性別訂有專屬對照標準，計算時將自動比對。</p>
+                <p>🌸 <strong>全民健康總建議：</strong> 每天維持「天天5顆草/水果」、少油少鹽、少喝含糖飲料、每天運動 30-60 分鐘！</p>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-400 text-xs font-bold pb-4">
+            🐾 本網頁計算標準參考衛生福利部國民健康署兒童及青少年與成人體位標準 🌸
+        </p>
+    </footer>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 衛福部 兒童與青少年 BMI 對照表 (2~17 歲)
+        const childBMITable = {
+            boy: {
+                2: [14.7, 18.2, 19.5], 3: [14.3, 17.6, 18.8], 4: [14.0, 17.2, 18.4], 5: [13.8, 17.0, 18.3],
+                6: [13.7, 17.0, 18.5], 7: [13.8, 17.4, 19.2], 8: [14.0, 18.1, 20.3], 9: [14.3, 19.0, 21.4],
+                10: [14.7, 19.9, 22.5], 11: [15.2, 20.8, 23.6], 12: [15.7, 21.7, 24.5], 13: [16.3, 22.5, 25.3],
+                14: [16.9, 23.2, 26.0], 15: [17.5, 23.8, 26.5], 16: [18.1, 24.3, 26.9], 17: [18.6, 24.7, 27.2]
+            },
+            girl: {
+                2: [14.3, 17.7, 19.0], 3: [13.9, 17.2, 18.4], 4: [13.6, 16.8, 18.0], 5: [13.4, 16.7, 18.0],
+                6: [13.3, 16.7, 18.2], 7: [13.4, 17.1, 18.9], 8: [13.6, 17.7, 19.8], 9: [14.0, 18.5, 20.8],
+                10: [14.4, 19.4, 21.8], 11: [15.0, 20.3, 22.8], 12: [15.6, 21.2, 23.7], 13: [16.2, 22.0, 24.5],
+                14: [16.7, 22.6, 25.1], 15: [17.1, 23.0, 25.5], 16: [17.4, 23.3, 25.7], 17: [17.6, 23.5, 25.8]
+            }
+        };
+
+        function toggleAgeInput() {
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            const ageBlock = document.getElementById('age-input-block');
+            const ageInput = document.getElementById('age');
+
+            if (userType === 'child') {
+                ageBlock.classList.remove('hidden');
+                ageInput.required = true;
+            } else {
+                ageBlock.classList.add('hidden');
+                ageInput.required = false;
+            }
+        }
+
+        function calculateBMI(event) {
+            event.preventDefault();
+
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseInt(document.getElementById('age').value);
+
+            if (!height || !weight || (userType === 'child' && (!age || age < 2 || age > 17))) {
+                alert('請完整填寫正確的身高、體重與年齡（兒童請填寫 2~17 歲）喔！');
+                return;
+            }
+
+            const heightInMeters = height / 100;
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+            let status = "";
+            let colorClass = "";
+            let tagColorClass = "";
+            let animalEmoji = "🐶";
+            let advice = "";
+            let referenceText = "";
+
+            if (userType === 'adult') {
+                referenceText = "成人衛福部基準：體重過輕 (<18.5) | 正常範圍 (18.5 ≤ BMI < 24) | 體重過重 (24 ≤ BMI < 27) | 肥胖 (BMI ≥ 27)";
+                
+                if (bmi < 18.5) {
+                    status = "體重過輕";
+                    colorClass = "border-sky-300 bg-sky-50";
+                    tagColorClass = "bg-sky-400";
+                    animalEmoji = "🐱";
+                    advice = "衛福部建議：體重有些偏輕喔！建議保持均衡飲食，多攝取優質蛋白質，搭配適度運動來增強體力！";
+                } else if (bmi >= 18.5 && bmi < 24) {
+                    status = "體重正常";
+                    colorClass = "border-emerald-300 bg-emerald-50";
+                    tagColorClass = "bg-emerald-500";
+                    animalEmoji = "🐶";
+                    advice = "衛福部建議：太棒了！您的體位維持在十分健康的範圍，請繼續保持均衡飲食與規律運動的生活習慣！";
+                } else if (bmi >= 24 && bmi < 27) {
+                    status = "體重過重";
+                    colorClass = "border-amber-300 bg-amber-50";
+                    tagColorClass = "bg-amber-500";
+                    animalEmoji = "🐻";
+                    advice = "衛福部建議：體重稍微偏重囉！建議控制熱量攝取，減少含糖飲料與高油食物，每週規律運動 150 分鐘！";
+                } else {
+                    status = "肥胖";
+                    colorClass = "border-rose-300 bg-rose-50";
+                    tagColorClass = "bg-rose-500";
+                    animalEmoji = "🐼";
+                    advice = "衛福部建議：目前體重屬於肥胖範圍，建議諮詢醫師或營養師，訂定健康的飲食控制與運動減重計畫！";
+                }
+            } else {
+                const genderTable = childBMITable[gender][age];
+                const under = genderTable[0];
+                const normal = genderTable[1];
+                const over = genderTable[2];
+
+                referenceText = `${age} 歲${gender === 'boy' ? '男孩' : '女孩'}衛福部對照基準：過輕 (< ${under}) | 正常 (${under} ~ ${normal}) | 過重 (${normal} ~ ${over}) | 肥胖 (≥ ${over})`;
+
+                if (bmi < under) {
+                    status = "體重過輕";
+                    colorClass = "border-sky-300 bg-sky-50";
+                    tagColorClass = "bg-sky-400";
+                    animalEmoji = "🐰";
+                    advice = "衛福部建議：孩子正處於發育期，體重偏輕需要注意營養均衡，不挑食、多吃原型食物！";
+                } else if (bmi >= under && bmi <= normal) {
+                    status = "體重正常";
+                    colorClass = "border-emerald-300 bg-emerald-50";
+                    tagColorClass = "bg-emerald-500";
+                    animalEmoji = "🐥";
+                    advice = "衛福部建議：非常健康！成長發育狀況良好，請保持每天運動 60 分鐘、充足睡眠與均衡飲食！";
+                } else if (bmi > normal && bmi <= over) {
+                    status = "體重過重";
+                    colorClass = "border-amber-300 bg-amber-50";
+                    tagColorClass = "bg-amber-500";
+                    animalEmoji = "🐹";
+                    advice = "衛福部建議：體重稍微超標囉！少吃零食與含糖飲料，多到戶外跑跑跳跳，增加身體活動量！";
+                } else {
+                    status = "肥胖";
+                    colorClass = "border-rose-300 bg-rose-50";
+                    tagColorClass = "bg-rose-500";
+                    animalEmoji = "🦛";
+                    advice = "衛福部建議：體重已經達到肥胖範圍囉！建議家長協助調整飲食結構，減少看電視打電玩的時間，多進行戶外運動！";
+                }
+            }
+
+            const resultCard = document.getElementById('result-card');
+            resultCard.className = `mt-8 p-6 rounded-3xl border-4 transition-all animate-pulse-cute ${colorClass}`;
+            
+            document.getElementById('animal-avatar').innerText = animalEmoji;
+            document.getElementById('bmi-value').innerText = bmi;
+            
+            const statusTag = document.getElementById('result-status-tag');
+            statusTag.innerText = status;
+            statusTag.className = `px-3 py-1 rounded-full text-white font-black text-sm ${tagColorClass}`;
+
+            document.getElementById('result-category-tag').innerText = `${userType === 'adult' ? '成人' : age + '歲' + (gender === 'boy' ? '男孩' : '女孩')}`;
+            document.getElementById('result-advice').innerText = advice;
+            document.getElementById('reference-note').innerText = referenceText;
+
+            resultCard.classList.remove('hidden');
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
